@@ -5,7 +5,7 @@
 GitOfHolding:
 ============
 
-Creates a backup of the savegames from the games specified down below (see "mapping").
+Creates a backup of the options and savegames from the games specified down below (see "mapping").
 The currently supported games are:
 - Baldur's Gate: Enhanced Edition
 - Baldur's Gate II: Enhanced Edition
