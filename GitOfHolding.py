@@ -24,24 +24,34 @@ DATA: str = os.path.normpath(os.path.join(pathlib.Path(__file__).parent.resolve(
 # Mapping of game to savegame folder
 KEY_TITLE = "title"
 KEY_SAVEGAMES = "savegames"
+KEY_OPTIONS = "options"
 
 mapping: list[dict[str, str]] = [
     {
         KEY_TITLE:      "Baldur's Gate: Enhanced Edition",
         KEY_SAVEGAMES:  os.path.normpath(
             os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\save")
+        ),
+        KEY_OPTIONS:    os.path.normpath(
+            os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\Baldur.lua")
         )
     },
     {
         KEY_TITLE:      "Baldur's Gate II: Enhanced Edition",
         KEY_SAVEGAMES:  os.path.normpath(
             os.path.join(HOME, "Documents\\Baldur's Gate II - Enhanced Edition\\save")
+        ),
+        KEY_OPTIONS:    os.path.normpath(
+            os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\Baldur.lua")
         )
     },
     {
         KEY_TITLE:      "Icewind Dale: Enhanced Edition",
         KEY_SAVEGAMES:  os.path.normpath(
             os.path.join(HOME, "Documents\\Icewind Dale - Enhanced Edition\\save")
+        ),
+        KEY_OPTIONS:    os.path.normpath(
+            os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\Baldur.lua")
         )
     }
 ]
@@ -52,19 +62,36 @@ Main method called when script / executable is running
 """
 if __name__ == "__main__":
     for game in mapping:
-        if not os.path.exists(game[KEY_SAVEGAMES]):
-            print(f"{game[KEY_TITLE]} -> no savegames available, maybe game not installed!")
+        # i) if no options found the game was not played yet therefore also no savegames available
+        if not os.path.exists(game[KEY_OPTIONS]):
+            print(f"{game[KEY_TITLE]} -> no options available, maybe game not installed!")
             continue
 
-        print(f"{game[KEY_TITLE]} -> savegames found, therefore backuping them!")
+        # ii) backup options
+        print(f"{game[KEY_TITLE]} -> options found, therefore backing them up!")
 
         saved_files: str = os.path.join(
-            DATA, game[KEY_TITLE].replace("'", "").replace(":", "").replace(" ", "-")
+            DATA, game[KEY_TITLE].replace(":", " -")
         )
         if os.path.exists(saved_files):
             shutil.rmtree(saved_files)
-        else:
-            os.mkdir(saved_files)
+        
+        os.mkdir(saved_files)
+        
+        shutil.copy(
+            game[KEY_OPTIONS],
+            os.path.join(saved_files, game[KEY_OPTIONS].split("\\")[-1])
+        )
+
+        print(f"{game[KEY_TITLE]} -> options fully backed up!")
+
+        # iii) if no savegames found the game was not played yet
+        if not os.path.exists(game[KEY_SAVEGAMES]) or len(os.listdir(game[KEY_SAVEGAMES])) < 1:
+            print(f"{game[KEY_TITLE]} -> no savegames available, maybe game not played yet!")
+            continue
+
+        # iv) backup savegames
+        print(f"{game[KEY_TITLE]} -> savegames found, therefore backing them up!")
         
         for element in os.listdir(game[KEY_SAVEGAMES]):
             element_path = os.path.join(game[KEY_SAVEGAMES], element)
@@ -73,4 +100,4 @@ if __name__ == "__main__":
             else:
                 shutil.copy(element_path, os.path.join(saved_files, element))
         
-        print(f"{game[KEY_TITLE]} -> savegames fully backuped!")
+        print(f"{game[KEY_TITLE]} -> savegames fully backed up!")
