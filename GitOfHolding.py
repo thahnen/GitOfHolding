@@ -8,6 +8,7 @@ GitOfHolding:
 Creates a backup of the options and savegames from the games specified down below (see "mapping").
 The currently supported games are:
 - Baldur's Gate: Enhanced Edition
+    -> The Black Pits
 - Baldur's Gate II: Enhanced Edition
 - Icewind Dale: Enhanced Edition
 """
@@ -31,6 +32,15 @@ mapping: list[dict[str, str]] = [
         KEY_TITLE:      "Baldur's Gate: Enhanced Edition",
         KEY_SAVEGAMES:  os.path.normpath(
             os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\save")
+        ),
+        KEY_OPTIONS:    os.path.normpath(
+            os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\Baldur.lua")
+        )
+    },
+    {
+        KEY_TITLE:      "Baldur's Gate: Enhanced Edition (The Black Pits)",
+        KEY_SAVEGAMES:  os.path.normpath(
+            os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\bpsave")
         ),
         KEY_OPTIONS:    os.path.normpath(
             os.path.join(HOME, "Documents\\Baldur's Gate - Enhanced Edition\\Baldur.lua")
